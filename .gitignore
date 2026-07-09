@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+
+# Генерируется скриптом prepare_dataset.py
+MCQ_balanced.txt
