@@ -49,6 +49,30 @@ It should print `True`. If it prints `False`, the CPU-only version of PyTorch is
 | `train_qlora.py` | QLoRA fine-tuning for Qwen2.5-7B-Instruct (current version) |
 | `generate_qlora.py` | Interactive MCQ generation using the QLoRA model |
 | `mcq_qlora/` | Saved LoRA adapter generated after training |
+| `eval_generate.py` | Builds a blind evaluation set from three systems (fine-tuned / zero-shot / few-shot) |
+| `eval_analyze.py` | Aggregates expert rating sheets: per-system metrics + Fleiss' kappa |
+
+## Evaluation Protocol
+
+The evaluation compares three systems under one protocol: the fine-tuned model, the plain base model with the same one-line prompt (zero-shot), and the plain base model with three example questions in the prompt (few-shot).
+
+```bash
+# 1. Build the blind set (GPU machine; ~72 items across 12 level/topic pairs).
+#    Format validity is scored automatically over all raw samples;
+#    well-formed items go into the blind set under neutral ids.
+python eval_generate.py
+
+# 2. Give each expert their own copy of eval_out/rater_sheet.csv.
+#    Raters fill five rubric columns per item:
+#    format_valid (0/1), factually_correct (0/1), distractor_quality (0-2),
+#    difficulty_appropriate (0/1), usable (0 = reject, 1 = after edit, 2 = as is).
+#    Do not show them eval_out/key.csv - it maps item ids to systems.
+
+# 3. Aggregate the filled sheets (2+ raters).
+python eval_analyze.py eval_out/key.csv rater1.csv rater2.csv rater3.csv
+```
+
+`eval_analyze.py` reports per-system means for every rubric dimension, the share of genuinely new questions (checked against the training corpus automatically), and inter-rater agreement (Fleiss' kappa). Results are written to `eval_out/results.md`. A quick pipeline check without a GPU: `python eval_generate.py --mock`.
 
 ## Why the Model Used to Always Answer "B"
 
