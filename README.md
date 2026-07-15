@@ -74,6 +74,13 @@ python eval_analyze.py eval_out/key.csv rater1.csv rater2.csv rater3.csv
 
 `eval_analyze.py` reports per-system means for every rubric dimension, the share of genuinely new questions (checked against the training corpus automatically), and inter-rater agreement (Fleiss' kappa). Results are written to `eval_out/results.md`. A quick pipeline check without a GPU: `python eval_generate.py --mock`.
 
+## Authors
+
+- **Amirlan Seitkadyrov** ([@AmirlanSeit](https://github.com/AmirlanSeit)) — Space School, Astana, Kazakhstan
+- **Akezhan Omashev** ([@Bebrapro2007](https://github.com/Bebrapro2007)) — National School of Physics and Math, Astana, Kazakhstan
+
+Supervised by Asset Alkhanov (Department of Artificial Intelligence Technologies, L.N. Gumilyov Eurasian National University, Astana, Kazakhstan).
+
 ## Why the Model Used to Always Answer "B"
 
 In the original dataset, the correct answer was **B** in 41% of the questions, while **D** appeared in only 5%. As a result, the model learned the frequency of answer letters instead of the actual Computer Science content.
